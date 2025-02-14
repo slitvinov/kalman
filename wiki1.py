@@ -1,24 +1,8 @@
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 
-
-def transpose(x):
-    return x
-
-
-def inverse(Z):
-    return 1 / Z
-
-
-def rand():
-    return np.random.normal(0, 1, 1)
-
-
-def sqrt(x):
-    return scipy.linalg.sqrtm(x)
-
+dim = 1
 x = np.array([0], dtype=float)
 xx = np.array([1000], dtype=float)
 
@@ -34,21 +18,21 @@ I = np.array([[1]], dtype=float)
 Trace = []
 
 for t in range(100):
-    x = F @ x + B @ u + sqrt(Q) @ rand() # state
-    z = H @ x + sqrt(R) @ rand()         # observation
+    x = F @ x + B @ u + scipy.linalg.sqrtm(Q) @ np.random.normal(0, 1, dim) # state
+    z = H @ x + scipy.linalg.sqrtm(R) @ np.random.normal(0, 1, dim)         # observation
 
     xp = F @ xx + B @ u
-    P = F @ P @ transpose(F) + Q
+    P = F @ P @ np.transpose(F) + Q
 
     y = z - H @ xp
-    S = H @ P @ transpose(H) + R
-    K = P @ transpose(H) @ inverse(S)
-    
+    S = H @ P @ np.transpose(H) + R
+    K = P @ np.transpose(H) @ np.linalg.inv(S)
+
     xx = xp + K @ y
-    P = P @ (I - K @ H) 
+    P = P @ (np.eye(dim) - K @ H)
     Trace.append((x, z, xx))
 
 x, z, xx = zip(*Trace)
-plt.plot(x, '-b', z, 'o', xx, '-r')
+plt.plot(x, "-b", z, "o", xx, "-r")
 plt.legend(["state", "observation", "estimate"])
 plt.savefig("wiki1.png")
