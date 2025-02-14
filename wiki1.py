@@ -11,10 +11,9 @@ B = np.array([[1]], dtype=float)
 Q = np.array([[100]], dtype=float)
 R = np.array([[10000]], dtype=float)
 
-P = np.array([[1]], dtype=float)
-H = np.array([[1]], dtype=float)
-F = np.array([[1]], dtype=float)
-I = np.array([[1]], dtype=float)
+P = np.eye(dim)
+H = np.eye(dim)
+F = np.eye(dim)
 Trace = []
 
 for t in range(100):
