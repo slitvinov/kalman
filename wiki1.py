@@ -7,18 +7,20 @@ x = np.array([0], dtype=float)
 xx = np.array([1000], dtype=float)
 
 u = np.array([5], dtype=float)
-B = np.array([[1]], dtype=float)
+F = np.eye(dim)
+B = np.eye(dim)
 Q = np.array([[100]], dtype=float)
 R = np.array([[10000]], dtype=float)
+H = np.eye(dim)
 
 P = np.eye(dim)
-H = np.eye(dim)
-F = np.eye(dim)
 Trace = []
 
 for t in range(100):
-    x = F @ x + B @ u + scipy.linalg.sqrtm(Q) @ np.random.normal(0, 1, dim) # state
-    z = H @ x + scipy.linalg.sqrtm(R) @ np.random.normal(0, 1, dim)         # observation
+    x = F @ x + B @ u + scipy.linalg.sqrtm(Q) @ np.random.normal(0, 1,
+                                                                 dim)  # state
+    z = H @ x + scipy.linalg.sqrtm(R) @ np.random.normal(0, 1,
+                                                         dim)  # observation
 
     xp = F @ xx + B @ u
     P = F @ P @ np.transpose(F) + Q
@@ -34,4 +36,4 @@ for t in range(100):
 x, z, xx = zip(*Trace)
 plt.plot(x, "-b", z, "o", xx, "-r")
 plt.legend(["state", "observation", "estimate"])
-plt.savefig("wiki1.png")
+plt.savefig("wiki1.svg")
