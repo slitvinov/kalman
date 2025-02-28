@@ -10,7 +10,6 @@ F = np.array([[1, dt], [0, 1]], dtype=float)
 Q = np.array([[1 / 4 * dt**4, 1 / 2 * dt**3], [1 / 2 * dt**3, dt**2]],
              dtype=float)
 R = np.eye(dim)
-H = np.eye(dim)
 
 xx = np.array([0, 0], dtype=float)
 P = np.eye(dim)
@@ -18,16 +17,14 @@ Trace = []
 
 for t in range(100):
     x = F @ x + scipy.linalg.sqrtm(Q) @ rng.normal(0, 1, dim)
-    z = H @ x + scipy.linalg.sqrtm(R) @ rng.normal(0, 1, dim)
+    z = x + scipy.linalg.sqrtm(R) @ rng.normal(0, 1, dim)
 
     xp = F @ xx
     P = F @ P @ np.transpose(F) + Q
-    y = z - H @ xp
-    S = H @ P @ np.transpose(H) + R
-    K = P @ np.transpose(H) @ np.linalg.inv(S)
+    K = P @ np.linalg.inv(P + R)
 
-    xx = xp + K @ y
-    P = P @ (np.eye(dim) - K @ H)
+    xx = xp + K @ (z - xp)
+    P = P @ (np.eye(dim) - K)
     Trace.append((x, z, xx))
 
 x, z, xx = zip(*Trace)
