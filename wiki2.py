@@ -3,14 +3,14 @@ import numpy as np
 import scipy
 
 dim = 2
-dt = 0.1
+dt = 1
 x = np.array([0, 0], dtype=float)
 u = np.array([0, 0], dtype=float)
 F = np.array([[1, dt], [0, 1]], dtype=float)
 B = np.eye(dim)
 Q = np.array([[1 / 4 * dt**4, 1 / 2 * dt**3], [1 / 2 * dt**3, dt**2]],
              dtype=float)
-R = 0.1 * np.eye(dim)
+R = np.eye(dim)
 H = np.eye(dim)
 
 xx = np.array([0, 0], dtype=float)
